@@ -69,7 +69,7 @@ function custom_theme_scripts() {
     // Tailwind CSS (CDN for development)
     wp_enqueue_script( 'tailwindcss', 'https://cdn.tailwindcss.com', array(), '3.4.1', false );
     
-    // Tailwind Config
+    // Tailwind Config & Gutenberg Bridge
     wp_add_inline_script( 'tailwindcss', "
         tailwind.config = {
             theme: {
@@ -97,21 +97,88 @@ function custom_theme_scripts() {
         }
     " );
 
-    // Main JavaScript
-    wp_enqueue_script(
-        'custom-theme-script',
-        get_template_directory_uri() . '/assets/js/main.js',
-        array('jquery'), // Added jQuery dependency just in case, though we'll use Vanilla JS
-        wp_get_theme()->get( 'Version' ),
-        true
-    );
-    
-    // Comment reply script
-    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-        wp_enqueue_script( 'comment-reply' );
-    }
+    // Custom CSS for Gutenberg alignments and pagination
+    wp_add_inline_style( 'custom-theme-fonts', "
+        /* Fix for alignfull and alignwide to work with Tailwind container */
+        .alignfull {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+        .alignwide {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+        /* Default spacing for standard blocks to keep them readable */
+        .entry-content > *:not(.alignfull):not(.alignwide) {
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        
+        /* Grid Gap Fix */
+        .wp-block-columns {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 782px) {
+            .wp-block-columns {
+                flex-wrap: nowrap;
+            }
+        }
+        
+        /* Pagination Styling */
+        .styled-pagination > span:not(.pagination-link) {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #1a9ba5;
+            color: #ffffff;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+        }
+        
+        /* Heading Fixes for Frontend */
+        .entry-content h1 { font-size: 3rem; line-height: 1; font-weight: 700; margin-bottom: 1.5rem; }
+        .entry-content h2 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+        /* HERO STATS IMPROVEMENTS */
+        /* Make the Grid Gap bigger */
+        .wp-block-columns.gap-12 { gap: 4rem !important; }
+        .wp-block-columns.gap-4 { gap: 1.5rem !important; }
+
+        /* Make Cards Bigger & Spacing Better */
+        /* Target columns that have background styling (the cards) */
+        .wp-block-column[class*='bg-'] {
+            padding: 2.5rem !important; /* Bigger internal padding */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 220px; /* Force minimum height */
+        }
+        
+        /* Make the numbers inside cards bigger */
+        .wp-block-column[class*='bg-'] h3 {
+            font-size: 2.5rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* Make the text inside cards readable */
+        .wp-block-column[class*='bg-'] p {
+            font-size: 1rem !important;
+            line-height: 1.4 !important;
+        }
+    " );
 }
 add_action( 'wp_enqueue_scripts', 'custom_theme_scripts' );
+
 
 /**
  * Register Widget Areas
@@ -266,37 +333,4 @@ function custom_theme_customize_register( $wp_customize ) {
 }
 add_action( 'customize_register', 'custom_theme_customize_register' );
 
-/**
- * Register Block Patterns
- */
-function custom_theme_register_block_patterns() {
-    register_block_pattern_category(
-        'custom-theme',
-        array( 'label' => __( 'Custom Theme', 'custom-theme' ) )
-    );
 
-    register_block_pattern(
-        'custom-theme/cta-section',
-        array(
-            'title'       => __( 'CTA Section with Report', 'custom-theme' ),
-            'description' => _x( 'A call to action section for reports.', 'Block pattern description', 'custom-theme' ),
-            'categories'  => array( 'custom-theme' ),
-            'content'     => '<!-- wp:group {"className":"bg-cta-bg py-16 px-8 md:px-16 text-center max-w-6xl mx-auto shadow-sm rounded-sm"} -->
-                            <div class="wp-block-group bg-cta-bg py-16 px-8 md:px-16 text-center max-w-6xl mx-auto shadow-sm rounded-sm">
-                                <!-- wp:heading {"className":"text-3xl md:text-3xl font-bold text-brand-teal mb-4 font-heading"} -->
-                                <h2 class="text-3xl md:text-3xl font-bold text-brand-teal mb-4 font-heading">Mixed Migration Review 2025</h2>
-                                <!-- /wp:heading -->
-                                <!-- wp:paragraph {"className":"text-gray-600 max-w-3xl mx-auto mb-8 text-lg leading-relaxed"} -->
-                                <p class="text-gray-600 max-w-3xl mx-auto mb-8 text-lg leading-relaxed">Explore in-depth analysis, data, and stories on mixed migration dynamics...</p>
-                                <!-- /wp:paragraph -->
-                                <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
-                                <div class="wp-block-buttons">
-                                    <div class="wp-block-button"><a class="wp-block-button__link bg-brand-teal text-white py-3 px-8 rounded">Browse Online</a></div>
-                                </div>
-                                <!-- /wp:buttons -->
-                            </div>
-                            <!-- /wp:group -->',
-        )
-    );
-}
-add_action( 'init', 'custom_theme_register_block_patterns' );

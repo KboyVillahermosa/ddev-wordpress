@@ -8,30 +8,22 @@
 get_header();
 ?>
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="site-main-content py-8 h-full">
     <?php
     while ( have_posts() ) :
         the_post();
         ?>
 
-        <article id="post-<?php the_ID(); ?>" <?php post_class( 'max-w-4xl mx-auto py-12' ); ?>>
-            <header class="mb-12 text-center">
-                <?php the_title( '<h1 class="text-4xl md:text-5xl font-bold font-heading text-dark mb-6">', '</h1>' ); ?>
-            </header>
-
-            <?php if ( has_post_thumbnail() ) : ?>
-                <div class="mb-12 rounded-2xl overflow-hidden shadow-lg">
-                    <?php the_post_thumbnail( 'full', array( 'class' => 'w-full h-auto object-cover' ) ); ?>
-                </div>
-            <?php endif; ?>
-
-            <div class="prose prose-lg prose-slate mx-auto text-text-main">
+        <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+            <div class="entry-content w-full max-w-6xl mx-auto">
                 <?php
                 the_content();
 
                 wp_link_pages( array(
-                    'before' => '<div class="mt-8 flex space-x-2"><span class="font-bold">Pages:</span>',
-                    'after'  => '</div>',
+                    'before'      => '<div class="styled-pagination mt-12 flex items-center justify-center gap-2 font-sans">',
+                    'after'       => '</div>',
+                    'link_before' => '<span class="pagination-link px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition shadow-sm">',
+                    'link_after'  => '</span>',
                 ) );
                 ?>
             </div>
@@ -41,6 +33,7 @@ get_header();
     endwhile;
     ?>
 </div>
+
 
 <?php
 get_footer();
