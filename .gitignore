@@ -1,0 +1,13 @@
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/backup-db/
+
+# DDEV
+.ddev/db_snapshots/
+.ddev/.importdb*
+
+# OS
+.DS_Store
+Thumbs.db
