@@ -11,3 +11,11 @@ wp-content/backup-db/
 # OS
 .DS_Store
 Thumbs.db
+
+# Dependencies
+node_modules/
+**/node_modules/
+vendor/
+
+# Build
+web/wp-content/plugins/my-custom-blocks/build/
