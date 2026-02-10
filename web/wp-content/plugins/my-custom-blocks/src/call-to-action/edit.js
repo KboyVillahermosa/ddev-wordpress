@@ -1,10 +1,10 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
-import { PanelBody, TextControl, ColorPicker, SelectControl } from '@wordpress/components';
+import { useBlockProps, RichText } from '@wordpress/block-editor';
 import './editor.scss';
+import Inspector from '../components/call-to-action/Inspector';
 
 export default function Edit({ attributes, setAttributes }) {
-    const { heading, description, buttonText, buttonUrl, backgroundColor, textColor, alignment } = attributes;
+    const { heading, description, buttonText, backgroundColor, textColor, alignment } = attributes;
 
     const blockProps = useBlockProps({
         style: {
@@ -16,41 +16,7 @@ export default function Edit({ attributes, setAttributes }) {
 
     return (
         <>
-            <InspectorControls>
-                <PanelBody title={__('CTA Settings', 'call-to-action-block')}>
-                    <TextControl
-                        label={__('Button URL', 'call-to-action-block')}
-                        value={buttonUrl}
-                        onChange={(value) => setAttributes({ buttonUrl: value })}
-                        placeholder="https://example.com"
-                    />
-
-                    <SelectControl
-                        label={__('Text Alignment', 'call-to-action-block')}
-                        value={alignment}
-                        options={[
-                            { label: 'Left', value: 'left' },
-                            { label: 'Center', value: 'center' },
-                            { label: 'Right', value: 'right' },
-                        ]}
-                        onChange={(value) => setAttributes({ alignment: value })}
-                    />
-                </PanelBody>
-
-                <PanelBody title={__('Color Settings', 'call-to-action-block')} initialOpen={false}>
-                    <p>{__('Background Color', 'call-to-action-block')}</p>
-                    <ColorPicker
-                        color={backgroundColor}
-                        onChangeComplete={(value) => setAttributes({ backgroundColor: value.hex })}
-                    />
-
-                    <p style={{ marginTop: '20px' }}>{__('Text Color', 'call-to-action-block')}</p>
-                    <ColorPicker
-                        color={textColor}
-                        onChangeComplete={(value) => setAttributes({ textColor: value.hex })}
-                    />
-                </PanelBody>
-            </InspectorControls>
+            <Inspector attributes={attributes} setAttributes={setAttributes} />
 
             <div {...blockProps} className="wp-block-create-block-call-to-action">
                 <div className="cta-content">

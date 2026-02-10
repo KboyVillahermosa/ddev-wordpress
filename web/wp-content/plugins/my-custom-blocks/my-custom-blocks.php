@@ -15,11 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+
+/**
+ * Register Custom Post Types
+ */
+// require_once __DIR__ . '/inc/register-post-types.php';
+
 /**
  * Register all custom blocks
  */
 function my_custom_blocks_register_blocks() {
 	register_block_type( __DIR__ . '/build/copyright-date' );
 	register_block_type( __DIR__ . '/build/call-to-action' );
+	register_block_type( __DIR__ . '/build/dynamic-posts' );
 }
 add_action( 'init', 'my_custom_blocks_register_blocks' );

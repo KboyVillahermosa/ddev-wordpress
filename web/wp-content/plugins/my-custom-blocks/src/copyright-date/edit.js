@@ -1,16 +1,12 @@
-import { __ } from '@wordpress/i18n';
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+import { useBlockProps } from '@wordpress/block-editor';
 import { useEffect } from 'react';
+import Inspector from '../components/copyright-date/Inspector';
 
 export default function Edit({ attributes, setAttributes }) {
     const { fallbackCurrentYear, showStartingYear, startingYear } = attributes;
 
-    // Get the current year and make sure it's a string.
     const currentYear = new Date().getFullYear().toString();
 
-    // When the block loads, set the fallbackCurrentYear attribute to the
-    // current year if it's not already set.
     useEffect(() => {
         if (currentYear !== fallbackCurrentYear) {
             setAttributes({ fallbackCurrentYear: currentYear });
@@ -27,35 +23,7 @@ export default function Edit({ attributes, setAttributes }) {
 
     return (
         <>
-            <InspectorControls>
-                <PanelBody title={__('Settings', 'copyright-date-block')}>
-                    <ToggleControl
-                        checked={!!showStartingYear}
-                        label={__(
-                            'Show starting year',
-                            'copyright-date-block'
-                        )}
-                        onChange={() =>
-                            setAttributes({
-                                showStartingYear: !showStartingYear,
-                            })
-                        }
-                    />
-                    {showStartingYear && (
-                        <TextControl
-                            __next40pxDefaultSize
-                            label={__(
-                                'Starting year',
-                                'copyright-date-block'
-                            )}
-                            value={startingYear || ''}
-                            onChange={(value) =>
-                                setAttributes({ startingYear: value })
-                            }
-                        />
-                    )}
-                </PanelBody>
-            </InspectorControls>
+            <Inspector attributes={attributes} setAttributes={setAttributes} />
             <p {...useBlockProps()}>© {displayDate}</p>
         </>
     );

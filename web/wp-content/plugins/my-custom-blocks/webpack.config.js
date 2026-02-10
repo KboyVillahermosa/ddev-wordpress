@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         'copyright-date/index': path.resolve(process.cwd(), 'src/copyright-date/index.js'),
         'call-to-action/index': path.resolve(process.cwd(), 'src/call-to-action/index.js'),
+        'dynamic-posts/index': path.resolve(process.cwd(), 'src/dynamic-posts/index.js'),
     },
     output: {
         filename: '[name].js',

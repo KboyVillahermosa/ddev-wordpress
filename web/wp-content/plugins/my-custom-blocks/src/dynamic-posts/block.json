@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "my-custom-blocks/dynamic-posts",
+    "version": "1.0.0",
+    "title": "Dynamic Post List",
+    "category": "widgets",
+    "icon": "list-view",
+    "description": "A dynamic block that displays posts from a selected post type and taxonomy.",
+    "supports": {
+        "html": false,
+        "align": true
+    },
+    "attributes": {
+        "postType": {
+            "type": "string",
+            "default": "post"
+        },
+        "taxonomies": {
+            "type": "array",
+            "default": []
+        },
+        "postsPerPage": {
+            "type": "number",
+            "default": 3
+        }
+    },
+    "textdomain": "my-custom-blocks",
+    "editorScript": "file:./index.js",
+    "style": "file:./style.css",
+    "editorStyle": "file:./style.css",
+    "render": "file:./render.php"
+}
